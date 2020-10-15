@@ -1,0 +1,50 @@
+#!/bin/bash
+
+Ls=$(lscpu)
+F=$(free)
+D=$(df -h)
+date=$(date)
+date_now=$(date +%d.%m.%Y)
+date_time=$(date +%H:%M:%S)
+echo " Дата и время: $date_now -- $date_time"
+echo "---------------------------"
+echo " Имя учётной записи: $USER"
+echo "---------------------------"
+DM=$(hostname)
+echo " Доменное имя ПК: $DM"
+echo "---------------------------"
+echo " Процессор:"
+echo "  `lscpu | grep "Model name" | head -n 1 `"
+echo "  `lscpu | grep "Architecture" | head -n 1 `"
+echo "  `lscpu | grep "CPU MHz" | head -n 1 `"
+echo "  Core(s): 	     `lscpu | grep "Core(s) " | head -n 1 | cut -d ":" -f 2`"
+echo "  `lscpu | grep "Thread(s) " | head -n 1 `"
+echo "---------------------------"
+echo " Оперативная память:"
+echo $F | awk '{print "  " $1 ":	       " $8}'
+echo $F | awk '{print "  " $3 ":		       " $10}'
+echo "---------------------------"
+echo " Жёсткий диск:"
+echo $D | awk '{print "  Всего: 	       " $9}'
+echo $D | awk '{print "  Доступно: 	       " $11}'
+echo $D | awk '{print "  Смонтировано в корневую директорию: " $20}'
+echo $F | awk '{print "  SWAP всего: 	       " $15}'
+echo $F | awk '{print "  SWAP доступно:       " $17}'
+echo "---------------------------"
+echo " Сетевые интерфейсы:"
+echo "  Количество сетевых интерфейсов: 2"
+#name1=`ip addr list eth2 | head -1 | cut -d ":" -f -2| cut -d " " -f 2`
+#name2=`ip addr list wifi0 | head -1 | cut -d ":" -f -2| cut -d " " -f 2`
+#MAC1=`ip addr list eth2 | grep " link" | head -n 1 | cut -d " " -f 6`
+#MAC2=`ip addr list wifi0 | grep " link" | head -n 1 | cut -d " " -f 6`
+#IP1=`ip addr list eth2 | grep " inet " | head -n 1 | cut -d " " -f 6 | cut -d / -f 1` 
+#IP2=`ip addr list wifi0 | grep " inet " | head -n 1 | cut -d " " -f 6 | cut -d / -f 1` 
+echo "  ------------------------------------------------------------------------------------------------"
+echo "  | № | Имя сетевого интерфейса |      MAC адрес      |      IP адрес      | Скорость соединения |"
+echo "  ------------------------------------------------------------------------------------------------"
+echo "  | 1 | `ip addr list eth2 | head -1 | cut -d ":" -f -2| cut -d " " -f 2`                    | `ip addr list eth2 | grep " link" | head -n 1 | cut -d " " -f 6`   | `ip addr list eth2 | grep " inet " | head -n 1 | cut -d " " -f 6 | cut -d / -f 1`       | `speedtest | grep "Download" | head -n 1| cut -d ":" -f 2`       |"
+echo "  ------------------------------------------------------------------------------------------------"
+echo "  | 2 | `ip addr list wifi0 | head -1 | cut -d ":" -f -2| cut -d " " -f 2`                   | `ip addr list wifi0 | grep " link" | head -n 1 | cut -d " " -f 6`   | `ip addr list wifi0 | grep " inet " | head -n 1 | cut -d " " -f 6 | cut -d / -f 1`       | `speedtest | grep "Download" | head -n 1| cut -d ":" -f 2`       |"
+echo "  ------------------------------------------------------------------------------------------------"
+
+#EOF#
